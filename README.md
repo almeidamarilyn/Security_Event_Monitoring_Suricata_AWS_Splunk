@@ -1,5 +1,3 @@
-# Security_Event_Monitoring_Suricata_AWS_Splunk
-
 # Security Event Monitoring Framework  
 This project integrates **AWS CloudTrail**, **Suricata IDS**, and **Splunk** to enable centralized security monitoring. The system uses custom enrichment scripts and dashboards to streamline incident response, reduce false positives, and correlate security events from multiple sources for faster detection.
 

@@ -1,0 +1,82 @@
+<dashboard>
+  <label>CloudTrail and Suricata Alerts Dashboard</label>
+  <description>A dashboard for visualizing CloudTrail logs and Suricata IDS alerts.</description>
+
+  <!-- Row 1: CloudTrail Events by Source IP -->
+  <row>
+    <panel>
+      <chart>
+        <search>
+          <query>
+            index="cloudtrail" | stats count by sourceIPAddress, eventName | sort - count
+          </query>
+        </search>
+        <title>CloudTrail Events by Source IP</title>
+        <option name="charting.chart">bar</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- Row 2: Suricata Alerts Summary -->
+  <row>
+    <panel>
+      <chart>
+        <search>
+          <query>
+            index="suricata" | stats count by alert, src_ip, dst_ip | sort - count
+          </query>
+        </search>
+        <title>Suricata Alerts Summary</title>
+        <option name="charting.chart">pie</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- Row 3: Correlated CloudTrail and Suricata Data -->
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>
+            index="cloudtrail" OR index="suricata"
+            | eval event_time=strftime(_time, "%Y-%m-%d %H:%M:%S")
+            | stats count by eventName, sourceIPAddress, userName, event_time, alert, src_ip, dst_ip
+            | sort - count
+          </query>
+        </search>
+        <title>Correlated CloudTrail and Suricata Data</title>
+      </table>
+    </panel>
+  </row>
+
+  <!-- Row 4: CloudTrail Events by User -->
+  <row>
+    <panel>
+      <chart>
+        <search>
+          <query>
+            index="cloudtrail" | stats count by userIdentity.userName, eventName | sort - count
+          </query>
+        </search>
+        <title>CloudTrail Events by User</title>
+        <option name="charting.chart">line</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- Row 5: Suricata Alert Severity -->
+  <row>
+    <panel>
+      <chart>
+        <search>
+          <query>
+            index="suricata" | stats count by severity, alert | sort - count
+          </query>
+        </search>
+        <title>Suricata Alert Severity</title>
+        <option name="charting.chart">bar</option>
+      </chart>
+    </panel>
+  </row>
+
+</dashboard>
